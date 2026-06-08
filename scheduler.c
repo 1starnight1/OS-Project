@@ -212,6 +212,7 @@ void priority_preemptive(Process *processes, int n, ScheduleEvent *schedule, int
     
     for (int i = 0; i < n; i++) {
         processes[i].response_time = -1;
+        processes[i].remaining_time = processes[i].burst_time;
     }
     
     while (completed < n) {
@@ -432,8 +433,11 @@ void run_all_algorithms(Process *original, int n) {
     
     Process *processes = (Process *)malloc(n * sizeof(Process));
     
+    printf("正在执行 FCFS 调度算法...\n");
+    fflush(stdout);
     memcpy(processes, original, n * sizeof(Process));
     fcfs(processes, n, schedule, &schedule_count);
+    print_results(processes, n, schedule, schedule_count, "FCFS");
     float fcfs_tat = 0, fcfs_wt = 0, fcfs_rt = 0;
     int fcfs_max = 0;
     for (int i = 0; i < n; i++) {
@@ -444,8 +448,11 @@ void run_all_algorithms(Process *original, int n) {
     }
     results[result_count++] = (PerformanceResult){"FCFS", fcfs_tat/n, fcfs_wt/n, fcfs_rt/n, (float)n/fcfs_max};
     
+    printf("\n正在执行 SJF 调度算法...\n");
+    fflush(stdout);
     memcpy(processes, original, n * sizeof(Process));
     sjf(processes, n, schedule, &schedule_count);
+    print_results(processes, n, schedule, schedule_count, "SJF");
     float sjf_tat = 0, sjf_wt = 0, sjf_rt = 0;
     int sjf_max = 0;
     for (int i = 0; i < n; i++) {
@@ -456,8 +463,11 @@ void run_all_algorithms(Process *original, int n) {
     }
     results[result_count++] = (PerformanceResult){"SJF", sjf_tat/n, sjf_wt/n, sjf_rt/n, (float)n/sjf_max};
     
+    printf("\n正在执行 RR 调度算法...\n");
+    fflush(stdout);
     memcpy(processes, original, n * sizeof(Process));
     round_robin(processes, n, 2, schedule, &schedule_count);
+    print_results(processes, n, schedule, schedule_count, "Round Robin");
     float rr_tat = 0, rr_wt = 0, rr_rt = 0;
     int rr_max = 0;
     for (int i = 0; i < n; i++) {
@@ -468,8 +478,11 @@ void run_all_algorithms(Process *original, int n) {
     }
     results[result_count++] = (PerformanceResult){"RR", rr_tat/n, rr_wt/n, rr_rt/n, (float)n/rr_max};
     
+    printf("\n正在执行 Priority(NP) 调度算法...\n");
+    fflush(stdout);
     memcpy(processes, original, n * sizeof(Process));
     priority_non_preemptive(processes, n, schedule, &schedule_count);
+    print_results(processes, n, schedule, schedule_count, "Priority (Non-Preemptive)");
     float pnp_tat = 0, pnp_wt = 0, pnp_rt = 0;
     int pnp_max = 0;
     for (int i = 0; i < n; i++) {
@@ -480,8 +493,11 @@ void run_all_algorithms(Process *original, int n) {
     }
     results[result_count++] = (PerformanceResult){"Priority(NP)", pnp_tat/n, pnp_wt/n, pnp_rt/n, (float)n/pnp_max};
     
+    printf("\n正在执行 Priority(P) 调度算法...\n");
+    fflush(stdout);
     memcpy(processes, original, n * sizeof(Process));
     priority_preemptive(processes, n, schedule, &schedule_count);
+    print_results(processes, n, schedule, schedule_count, "Priority (Preemptive)");
     float pp_tat = 0, pp_wt = 0, pp_rt = 0;
     int pp_max = 0;
     for (int i = 0; i < n; i++) {
@@ -492,8 +508,11 @@ void run_all_algorithms(Process *original, int n) {
     }
     results[result_count++] = (PerformanceResult){"Priority(P)", pp_tat/n, pp_wt/n, pp_rt/n, (float)n/pp_max};
     
+    printf("\n正在执行 MLFQ 调度算法...\n");
+    fflush(stdout);
     memcpy(processes, original, n * sizeof(Process));
     mlfq(processes, n, schedule, &schedule_count);
+    print_results(processes, n, schedule, schedule_count, "Multi-Level Feedback Queue");
     float mlfq_tat = 0, mlfq_wt = 0, mlfq_rt = 0;
     int mlfq_max = 0;
     for (int i = 0; i < n; i++) {
